@@ -1,13 +1,10 @@
 #!/bin/sh
 
-DEST=/mnt
+DEST="$1"
+if ! [ -d "$DEST" ]; then
+	echo "Get target dir as parameter"
+	exit 1
+fi
 
-umount $DEST/proc
-umount $DEST/sys
-umount $DEST/tmp
-umount $DEST/var/tmp
-umount $DEST/dev/shm
-umount $DEST/dev/pts
-umount $DEST/dev
-
+umount --recursive "$DEST"
 sync
