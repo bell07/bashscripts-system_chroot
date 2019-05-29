@@ -105,12 +105,11 @@ fi
 export DEST
 
 
-do_mount /dev -o bind
-do_mount /dev/pts -o bind
-do_mount /dev/shm -t tmpfs -o rw,nosuid,nodev,noexec,relatime
-
-do_mount /sys -o bind
+do_mount /dev -o rbind,rslave
+do_mount /sys -o rbind,rslave
 do_mount /proc -t proc
+
+do_mount /usr/portage -o rbind,rslave
 
 RAMSIZE=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 if [ $RAMSIZE -ge 7701484 ]; then  # If RAM > 8 GB
