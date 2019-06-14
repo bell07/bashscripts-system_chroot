@@ -6,11 +6,15 @@ if ! [ -d "$DEST" ]; then
 	exit 1
 fi
 
+function do_umount(){
+	umount -v --recursive "$DEST"/"$1"
+}
+
 # Just try umount. Show error if failed
-umount --recursive "$DEST"/dev
-umount --recursive "$DEST"/sys
-umount "$DEST"/proc
-umount --recursive "$DEST"/usr/portage
-umount --recursive "$DEST"/tmp
-umount --recursive "$DEST"/var/tmp
+do_umount dev
+do_umount sys
+do_umount proc
+do_umount usr/portage
+do_umount tmp
+do_umount var/tmp
 sync
