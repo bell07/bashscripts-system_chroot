@@ -100,6 +100,48 @@ function do_mount(){
 	fi
 }
 
+function do_mount_portage(){
+# Mount portage tree
+	if [ -d /usr/portage ]; then
+		SRC_PORTAGE=/usr/portage
+	elif [ -d /var/db/repos/gentoo ]; then
+		SRC_PORTAGE=/var/db/repos/gentoo
+	else
+		echo "No gentoo portage found"
+		return
+	fi
+
+	if [ -d "$DEST"/usr/portage ]; then
+		DST_PORTAGE="$DEST"/usr/portage
+	elif [ -d "$DEST"/var/db/repos/gentoo ]; then
+		DST_PORTAGE="$DEST"/var/db/repos/gentoo
+	else
+		echo "No target gentoo portage found"
+		return
+	fi
+	mount -v -o rbind,rslave "$SRC_PORTAGE" "$DST_PORTAGE"
+
+# Mount portage distfiles
+	if [ -d /usr/portage/distfiles ]; then
+		SRC_DISTFILES=/usr/portage/distfiles
+	elif [ -d /var/cache/distfiles ]; then
+		SRC_DISTFILES=/var/cache/distfiles
+	else
+		echo "No distfiles found"
+		return
+	fi
+
+	if [ -d "$DEST"/usr/portage/distfiles ]; then
+		DST_DISTFILES="$DEST"/usr/portage/distfiles
+	elif [ -d "$DEST"/var/cache/distfiles ]; then
+		DST_DISTFILES="$DEST"/var/cache/distfiles
+	else
+		echo "No target distfiles found"
+		return
+	fi
+	mount -v -o rbind,rslave "$SRC_DISTFILES" "$DST_DISTFILES"
+}
+
 # Check if given parameter is valid root
 if [ -n "$1" ] && [ -z "$2" ]; then
 	DEST="$(check_valid_root "$1")"
@@ -126,7 +168,7 @@ do_mount /dev -o rbind,rslave
 do_mount /sys -o rbind,rslave
 do_mount /proc -t proc
 
-do_mount /usr/portage -o rbind,rslave
+do_mount_portage
 
 RAMSIZE=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 if [ "$RAMSIZE" -ge 7701484 ]; then  # If RAM > 8 GB

@@ -15,6 +15,8 @@ do_umount dev
 do_umount sys
 do_umount proc
 do_umount usr/portage
+do_umount var/db/repos/gentoo
+do_umount var/cache/distfiles
 do_umount tmp
 do_umount var/tmp
 sync
