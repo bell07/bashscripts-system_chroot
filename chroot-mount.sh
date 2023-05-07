@@ -172,8 +172,8 @@ do_mount_portage
 
 RAMSIZE=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 if [ "$RAMSIZE" -ge 7701484 ]; then  # If RAM > 8 GB
-	do_mount /tmp -t tmpfs -o size=100%
-	do_mount /var/tmp -t tmpfs -o size=100%
+	mount -v  -t tmpfs -o size=100% tmpfs "$DEST"/tmp
+	mount -v  -t tmpfs -o size=100% tmpfs "$DEST"/var/tmp
 fi
 
 rm "$DEST"/etc/resolv.conf
