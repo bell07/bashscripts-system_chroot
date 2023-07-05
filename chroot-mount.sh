@@ -11,6 +11,11 @@ my_mountpoints=( '/mnt' '/gentoo' '/mnt/usb_live/' )
 
 # Check if given path is a valid root
 function check_valid_root(){
+	if [ "$1" == "/" ] || [ "$1" == "" ]; then
+		echo '"'$1'" is not valid root for chroot' / 1>&2
+		return
+	fi
+
 	if [ -d "$1" ] &&
 			[ -d "$1"/proc ] &&
 			[ -d "$1"/dev ] &&

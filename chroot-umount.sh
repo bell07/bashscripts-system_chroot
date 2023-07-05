@@ -6,6 +6,11 @@ if ! [ -d "$DEST" ]; then
 	exit 1
 fi
 
+if [ "$DEST" == "/" ] || [ "$DEST" == "" ]; then
+	echo '"'$1'" is not valid root for chroot'
+	exit 1
+fi
+	
 function do_umount(){
 	umount -v --recursive "$DEST"/"$1"
 }
